@@ -1,6 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from '@/user/dto/create-user.dto';
+import { UserService } from '@/user/user.service';
+
 @Injectable()
 export class AuthService {
   // private logger = new Logger(AuthService.name);
@@ -8,23 +11,29 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private configService: ConfigService,
+    private userService: UserService,
   ) {}
 
-  async login(payload: { user: any }) {
+  async register(createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
+    return this.sendToken({ id: user.id });
+  }
+
+  login(payload: { user: any }) {
     const { user } = payload;
     return this.sendToken({ id: user.id });
   }
 
-  async sendToken(data: { id: string }) {
-    const { accessToken } = await this.accessToken(data);
+  sendToken(data: { id: number }) {
+    const { accessToken } = this.accessToken(data);
     return { state: 'LOGIN', access: accessToken };
   }
 
-  IsAccessVerified(payload) {
-    return true;
+  IsAccessVerified(id: number) {
+    return this.userService.findUserById(id);
   }
 
-  async accessToken(payload: { id: string }) {
+  accessToken(payload: { id: number }) {
     return {
       accessToken: this.jwtService.sign(
         { id: payload.id },
