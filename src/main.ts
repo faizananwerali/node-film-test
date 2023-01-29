@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { setupSwagger } from './swagger';
 import * as compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -39,6 +40,7 @@ async function bootstrap() {
 
   const globalPrefix = 'api';
 
+  setupSwagger(app);
   const port = process.env.API_PORT || 3000;
   await app.listen(port, () =>
     Logger.log(
