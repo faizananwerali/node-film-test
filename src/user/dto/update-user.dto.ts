@@ -49,7 +49,7 @@ export class UpdateUserDto {
       },
     },
   )
-  @Validate(IsEmailAlreadyExists)
+  // @Validate(IsEmailAlreadyExists)
   @ApiProperty({ example: faker.internet.email() })
   readonly email: string;
 
@@ -72,4 +72,10 @@ export class UpdateUserDto {
   })
   @ApiProperty({ example: faker.phone.number('1501#######'), required: false })
   contact: string;
+
+  @ApiProperty()
+  @Expose()
+  @IsString()
+  @IsDefined()
+  dateOfBirth!: Date;
 }

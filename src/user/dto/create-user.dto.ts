@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import {
   IsString,
   IsDefined,
@@ -12,7 +12,11 @@ import {
   MaxLength,
   Validate,
 } from 'class-validator';
-import { CustomMatchPasswords, CustomPassword } from '@common/validations';
+import {
+  CustomMatchPasswords,
+  CustomPassword,
+  IsEmailAlreadyExists,
+} from '@common/validations';
 
 const pass = faker.internet.password();
 
@@ -37,6 +41,7 @@ export class CreateUserDto {
   @IsString()
   @IsEmail()
   @ApiProperty({ required: true, example: faker.internet.email() })
+  // @Validate(IsEmailAlreadyExists)
   readonly email: string;
 
   @Expose()
@@ -50,8 +55,13 @@ export class CreateUserDto {
       propertyName: 'Contact Number',
     },
   })
-  @Matches(/^\+?\d{10,13}$/)
-  @ApiProperty({ required: false, example: faker.phone.number('1501#######') })
+  @Transform(({ value }) => value?.toString())
+  @Matches(/^\+?\d{10,13}$/g, {
+    context: {
+      propertyName: 'Contact Number',
+    },
+  })
+  @ApiProperty({ example: faker.phone.number('1501#######'), required: false })
   readonly contact: string;
 
   /*@ApiProperty()
