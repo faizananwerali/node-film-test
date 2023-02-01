@@ -9,7 +9,6 @@ export class FilmController {
   constructor(private readonly filmService: FilmService) {}
   @Post('create')
   async register(@Body() createFilmDto: CreateFilmDto) {
-    console.log('createFilmDto', createFilmDto);
     return this.filmService.create(createFilmDto);
   }
 }

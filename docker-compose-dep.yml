@@ -45,7 +45,7 @@ services:
 
   node-film-test-pgadmin:
     container_name: node-film-test-pgadmin
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: postgres@admin.com

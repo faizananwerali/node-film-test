@@ -37,7 +37,9 @@ export class FilmEntity {
   })
   public releaseYear?: Date;
 
-  @OneToMany(() => ActorsEntity, (actor) => actor.film)
+  @OneToMany(() => ActorsEntity, (actor) => actor.film, {
+    cascade: true,
+  })
   actors: ActorsEntity[];
 
   @CreateDateColumn({

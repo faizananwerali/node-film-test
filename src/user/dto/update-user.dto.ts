@@ -10,7 +10,7 @@ import {
   Matches,
 } from 'class-validator';
 import { Exclude, Expose, Transform } from 'class-transformer';
-// import { IsEmailAlreadyExists } from '@common/validations';
+import { IsEmailAlreadyExists } from '@common/validations';
 
 @Exclude()
 export class UpdateUserDto {
@@ -65,11 +65,11 @@ export class UpdateUserDto {
     },
   })
   @Transform(({ value }) => value?.toString())
-  @Matches(/^\+?\d{10,13}$/g, {
-    context: {
-      propertyName: 'Contact Number',
-    },
-  })
+  // @Matches(/^\+?\d{10,13}$/g, {
+  //   context: {
+  //     propertyName: 'Contact Number',
+  //   },
+  // })
   @ApiProperty({ example: faker.phone.number('1501#######'), required: false })
   contact: string;
 

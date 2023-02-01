@@ -14,28 +14,31 @@ export class FilmService {
   ) {}
 
   async create(createFilmDto: CreateFilmDto) {
-    console.log('create createFilmDto', createFilmDto);
-    console.log('create this.filmRepository', this.filmRepository);
-    /*const filmExistsByTitle = await this.filmRepository.findOneBy({
+    const filmExistsByTitle = await this.filmRepository.findOneBy({
       title: createFilmDto.title,
     });
-    console.log('filmExistsByTitle', filmExistsByTitle);
-
     if (!!filmExistsByTitle) {
       throw new BadRequestException('Film already exists with this title.');
-    }*/
+    }
+
     const newData = {
       title: createFilmDto.title,
       director: createFilmDto.director,
       releaseYear: createFilmDto.releaseYear,
     };
     const film = this.filmRepository.create(newData);
+    const filmData = await this.filmRepository.save(film);
     for (const actor of createFilmDto.actors) {
       const actorEntity = this.actorsRepository.create({
         name: actor,
-        film,
+        film: filmData,
       });
       await this.actorsRepository.save(actorEntity);
     }
+    return filmData;
   }
+
+  // async findOneBy(options: any) {
+  //   return this.filmRepository.findOne(options);
+  // }
 }

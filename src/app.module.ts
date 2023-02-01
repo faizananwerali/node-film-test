@@ -9,7 +9,7 @@ import { FilmModule } from './film/film.module';
 import { TransformInterceptor } from '@common/interceptor';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from '@common/configs';
-import { User } from '@common/entities';
+import { User, ActorsEntity, FilmEntity } from '@common/entities';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { User } from '@common/entities';
     }),
     TypeOrmModule.forRoot({
       ...typeOrmConfig,
-      entities: [User],
+      entities: [User, ActorsEntity, FilmEntity],
     }),
   ],
   providers: [
