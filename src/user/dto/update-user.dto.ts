@@ -47,7 +47,7 @@ export class UpdateUserDto {
         propertyName: 'Email Address',
         replaceAllPropertyName: false,
       },
-    },
+    }
   )
   // @Validate(IsEmailAlreadyExists)
   @ApiProperty({ example: faker.internet.email() })

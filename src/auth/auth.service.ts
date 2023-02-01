@@ -11,7 +11,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private configService: ConfigService,
-    private userService: UserService,
+    private userService: UserService
   ) {}
 
   async register(createUserDto: CreateUserDto) {
@@ -40,7 +40,7 @@ export class AuthService {
         {
           secret: this.configService.get<string>('JWT_SECRET'),
           expiresIn: this.configService.get<string>('JWT_EXPIRE'),
-        },
+        }
       ),
     };
   }

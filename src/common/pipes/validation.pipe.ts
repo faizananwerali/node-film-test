@@ -27,7 +27,7 @@ export class ValidationPipe implements PipeTransform<any> {
   }
 
   private async formatErrors(
-    validationErrors: ValidationError[],
+    validationErrors: ValidationError[]
   ): Promise<any> {
     const errors = {};
 

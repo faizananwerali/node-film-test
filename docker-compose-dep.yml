@@ -1,33 +1,33 @@
 version: '3.3'
 services:
-#  node-film-test-rabbitmq:
-#    image: lucifer8591/rabbitmq-server:3.7.17
-#    container_name: node-film-test-rabbitmq
-#    restart: always
-#    hostname: node-film-test-rabbitmq
-#    networks:
-#      - node-film-test.network
-#    environment:
-#      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-admin}
-#      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-admin}
-#    ports:
-#      - '4380:4369'
-#      - '5683:5672'
-#      - '25683:25672'
-#      - '15683:15672'
-#
-#  node-film-test-redis:
-#    container_name: node-film-test-redis
-#    restart: always
-#    ports:
-#      - 6378:6379
-#    logging:
-#      driver: none
-#    image: redis
-#    networks:
-#      - node-film-test.network
-#    volumes:
-#      - ../redis:/usr/local/etc/redis/
+  #  node-film-test-rabbitmq:
+  #    image: lucifer8591/rabbitmq-server:3.7.17
+  #    container_name: node-film-test-rabbitmq
+  #    restart: always
+  #    hostname: node-film-test-rabbitmq
+  #    networks:
+  #      - node-film-test.network
+  #    environment:
+  #      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-admin}
+  #      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-admin}
+  #    ports:
+  #      - '4380:4369'
+  #      - '5683:5672'
+  #      - '25683:25672'
+  #      - '15683:15672'
+  #
+  #  node-film-test-redis:
+  #    container_name: node-film-test-redis
+  #    restart: always
+  #    ports:
+  #      - 6378:6379
+  #    logging:
+  #      driver: none
+  #    image: redis
+  #    networks:
+  #      - node-film-test.network
+  #    volumes:
+  #      - ../redis:/usr/local/etc/redis/
 
   node-film-test-postgres:
     container_name: node-film-test-postgres
@@ -53,7 +53,7 @@ services:
     networks:
       - node-film-test.network
     ports:
-      - "5050:80"
+      - '5050:80'
 
 #  node-film-test-redis-commander:
 #    container_name: node-film-test-redis-commander

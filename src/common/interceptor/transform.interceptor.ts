@@ -18,7 +18,7 @@ export class TransformInterceptor<T>
 {
   intercept(
     context: ExecutionContext,
-    next: CallHandler,
+    next: CallHandler
   ): Observable<Response<T>> {
     const path = context.switchToHttp().getRequest().url;
 
@@ -30,7 +30,7 @@ export class TransformInterceptor<T>
           delete data['name'];
           throw new HttpException(
             { status: 'FAILED', ...data },
-            data['statusCode'],
+            data['statusCode']
           );
         }
         const res = {
@@ -60,10 +60,10 @@ export class TransformInterceptor<T>
               path,
               timestamp,
             },
-            status,
-          ),
+            status
+          )
         );
-      }),
+      })
     );
   }
 }
