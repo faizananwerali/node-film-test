@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "docker-dep:up": "docker-compose -f docker-compose-dep.yml up -d",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm:create-migration": "npm run typeorm -- migration:create db/migrations/$npm_config_name",
+    "typeorm:generate-migration": "npm run typeorm -- -d ./db/configs/ormConfig.ts migration:generate db/migrations/$npm_config_name",
+    "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./db/configs/ormConfig.ts",
+    "typeorm:revert-migration": "npm run typeorm migration:revert -- -d ./db/configs/ormConfig.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
@@ -38,6 +44,7 @@
     "helmet": "^6.0.1",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.1",
+    "pg": "^8.9.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.11"
