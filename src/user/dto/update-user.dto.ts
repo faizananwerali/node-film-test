@@ -10,7 +10,7 @@ import {
   Matches,
 } from 'class-validator';
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { IsEmailAlreadyExists } from '@/common/validations';
+// import { IsEmailAlreadyExists } from '@common/validations';
 
 @Exclude()
 export class UpdateUserDto {

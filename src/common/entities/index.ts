@@ -1,4 +1,6 @@
 import { User } from './user.entity';
-export { User };
+import { FilmEntity } from './film.entity';
+import { ActorsEntity } from './actors.entity';
+export { User, FilmEntity, ActorsEntity };
 
-export const entities = [User];
+export const entities = [User, FilmEntity, ActorsEntity];

@@ -1,4 +1,4 @@
-import { compareHash, generateHash } from '@/common/crypto';
+import { compareHash, generateHash } from '@common/crypto';
 import {
   BadRequestException,
   Injectable,
@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
-import { User as UserEntity } from '@/common/entities';
+import { User as UserEntity } from '@common/entities';
 
 @Injectable()
 export class UserService {
