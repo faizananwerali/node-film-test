@@ -22,7 +22,7 @@ async function bootstrap() {
       limit: '5mb',
       extended: true,
       parameterLimit: 50000,
-    }),
+    })
   );
   app.use(
     rateLimit({
@@ -30,7 +30,7 @@ async function bootstrap() {
       max: 5000,
       message:
         '⚠️ Too many request created from this IP, please try again after an hour',
-    }),
+    })
   );
 
   app.use('/', (req: Request, res: Response, next: NextFunction) => {
@@ -42,10 +42,11 @@ async function bootstrap() {
 
   setupSwagger(app);
   const port = process.env.API_PORT || 3000;
-  await app.listen(port, () =>
+  await app.listen(port, () => {
     Logger.log(
-      'API Listening at http://localhost:' + port + '/' + globalPrefix,
-    ),
-  );
+      'API Listening at http://localhost:' + port + '/' + globalPrefix
+    );
+    Logger.log('Swagger at http://localhost:' + port + '/docs');
+  });
 }
 bootstrap();

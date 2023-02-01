@@ -14,6 +14,8 @@ import {
 } from 'class-validator';
 import { CustomMatchPasswords, CustomPassword } from '@common/validations';
 
+const pass = faker.internet.password();
+
 @Exclude()
 export class CreateUserDto {
   @Expose()
@@ -63,14 +65,16 @@ export class CreateUserDto {
   @MinLength(8)
   // @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
   @Validate(CustomPassword)
-  @ApiProperty({ example: faker.internet.password() })
+  @ApiProperty({ required: true, example: pass })
   readonly password: string;
 
+  @Expose()
   @IsString()
-  @MinLength(4)
-  @MaxLength(20)
+  @IsDefined()
+  @MinLength(8)
   @Validate(CustomMatchPasswords, ['password'])
-  passwordConfirmation: string;
+  @ApiProperty({ required: true, example: pass })
+  readonly passwordConfirmation: string;
 
   @ApiProperty()
   @Expose()

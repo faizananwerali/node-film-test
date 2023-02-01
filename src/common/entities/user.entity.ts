@@ -55,6 +55,13 @@ export class User {
 
   @CreateDateColumn({
     type: 'timestamptz',
+    name: 'dateOfBirth',
+    nullable: true,
+  })
+  public dateOfBirth?: Date;
+
+  @CreateDateColumn({
+    type: 'timestamptz',
     name: 'created_at',
     nullable: false,
     readonly: true,

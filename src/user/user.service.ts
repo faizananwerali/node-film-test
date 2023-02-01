@@ -14,11 +14,11 @@ import { User as UserEntity } from '@/common/entities';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>,
+    private usersRepository: Repository<UserEntity>
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const userExistsByEmail = await this.findUser({
+    const userExistsByEmail = await this.usersRepository.findOneBy({
       email: createUserDto.email,
     });
 
@@ -65,8 +65,20 @@ export class UserService {
   }
 
   async validateUser(payload: { email: string; password: string }) {
-    const user = await this.usersRepository.findOneBy({
-      email: payload.email,
+    const user = await this.usersRepository.findOne({
+      select: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'contact',
+        'password',
+        'dateOfBirth',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+      ],
+      where: { email: payload.email },
     });
 
     if (!user) throw new BadRequestException('Invalid Credentials');
