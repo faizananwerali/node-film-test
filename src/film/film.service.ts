@@ -1,8 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateFilmDto } from '@/user/dto/create-film.dto';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateFilmDto } from '@/film/dto/create-film.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilmEntity, ActorsEntity } from '@common/entities';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
+import { UpdateFilmDto } from '@/film/dto/update-film.dto';
+import { GetAllFilmDto } from '@/film/dto/get-all-film.dto';
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 
 @Injectable()
 export class FilmService {
@@ -13,7 +20,7 @@ export class FilmService {
     private actorsRepository: Repository<ActorsEntity>
   ) {}
 
-  async create(createFilmDto: CreateFilmDto) {
+  async create(createFilmDto: CreateFilmDto): Promise<FilmEntity> {
     const filmExistsByTitle = await this.filmRepository.findOneBy({
       title: createFilmDto.title,
     });
@@ -26,19 +33,102 @@ export class FilmService {
       director: createFilmDto.director,
       releaseYear: createFilmDto.releaseYear,
     };
-    const film = this.filmRepository.create(newData);
-    const filmData = await this.filmRepository.save(film);
+    const filmEntity = this.filmRepository.create(newData);
+    const film = await this.filmRepository.save(filmEntity);
+    const actorsList = [];
     for (const actor of createFilmDto.actors) {
-      const actorEntity = this.actorsRepository.create({
+      actorsList.push({
         name: actor,
-        film: filmData,
+        film: film,
       });
-      await this.actorsRepository.save(actorEntity);
     }
-    return filmData;
+    const actorsEntity = this.actorsRepository.create(actorsList);
+    await this.actorsRepository.save(actorsEntity);
+    return await this.filmRepository.findOne({
+      relations: ['actors'],
+      where: { id: film.id },
+    });
   }
 
-  // async findOneBy(options: any) {
-  //   return this.filmRepository.findOne(options);
-  // }
+  async findAll(query: GetAllFilmDto): Promise<FilmEntity[]> {
+    const { search, limit, page } = query;
+    const option: FindManyOptions = {
+      relations: ['actors'],
+    };
+    if (search) {
+      option.where = {
+        title: Like(`%${search}%`),
+      };
+    }
+    if (limit) {
+      option.take = limit;
+    }
+    if (page) {
+      option.skip = (page - 1) * limit;
+    }
+    return await this.filmRepository.find(option);
+  }
+
+  async findOne(id: number): Promise<FilmEntity> {
+    const film = await this.filmRepository.findOne({
+      relations: ['actors'],
+      where: { id },
+    });
+    if (!film) throw new NotFoundException('Film Not Found.');
+    return film;
+  }
+
+  async update(id: number, updateFilmDto: UpdateFilmDto): Promise<FilmEntity> {
+    let film = await this.filmRepository.findOneBy({ id });
+    if (!film) throw new NotFoundException('Film Not Found.');
+
+    if (updateFilmDto.title) {
+      film.title = updateFilmDto.title;
+    }
+    if (updateFilmDto.director) {
+      film.director = updateFilmDto.director;
+    }
+    if (updateFilmDto.releaseYear) {
+      film.releaseYear = updateFilmDto.releaseYear;
+    }
+    film = await this.filmRepository.save(film);
+
+    if (updateFilmDto.actors) {
+      await this.actorsRepository
+        .createQueryBuilder()
+        .delete()
+        .from(ActorsEntity)
+        .where('filmId = :filmId', { filmId: film.id })
+        .execute();
+
+      const actorsList = [];
+      for (const actor of updateFilmDto.actors) {
+        actorsList.push({
+          name: actor,
+          film: film,
+        });
+      }
+      const actorsEntity = this.actorsRepository.create(actorsList);
+      await this.actorsRepository.save(actorsEntity);
+    }
+
+    return await this.filmRepository.findOne({
+      relations: ['actors'],
+      where: { id: film.id },
+    });
+  }
+
+  async remove(id: number): Promise<any> {
+    const film = await this.filmRepository.findOneBy({ id });
+    if (!film) throw new NotFoundException('Film Not Found.');
+
+    await this.actorsRepository
+      .createQueryBuilder()
+      .delete()
+      .from(ActorsEntity)
+      .where('filmId = :filmId', { filmId: film.id })
+      .execute();
+
+    await this.filmRepository.remove(film);
+  }
 }

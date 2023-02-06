@@ -17,7 +17,7 @@ export class UserService {
     private usersRepository: Repository<UserEntity>
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const userExistsByEmail = await this.usersRepository.findOneBy({
       email: createUserDto.email,
     });
@@ -31,24 +31,27 @@ export class UserService {
     return await this.usersRepository.save(user);
   }
 
-  async findAll() {
+  async findAll(): Promise<UserEntity[]> {
     return await this.usersRepository.find();
   }
 
-  async findUser(query: object) {
+  async findUser(query: object): Promise<UserEntity> {
     const user = await this.usersRepository.findOneBy(query);
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
   }
 
-  async findUserById(userId: number) {
+  async findUserById(userId: number): Promise<UserEntity> {
     const id = typeof userId === 'string' ? parseFloat(userId) : userId;
     const user = this.usersRepository.findOneBy({ id });
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
   }
 
-  async updateUser(userId: string, updateUserData: UpdateUserDto) {
+  async updateUser(
+    userId: string,
+    updateUserData: UpdateUserDto
+  ): Promise<UserEntity> {
     const user = await this.usersRepository.findOne({
       where: { id: parseFloat(userId) },
     });
@@ -64,7 +67,10 @@ export class UserService {
     return user;
   }
 
-  async validateUser(payload: { email: string; password: string }) {
+  async validateUser(payload: {
+    email: string;
+    password: string;
+  }): Promise<UserEntity> {
     const user = await this.usersRepository.findOne({
       select: [
         'id',
