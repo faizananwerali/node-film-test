@@ -6,7 +6,7 @@ import * as path from 'path';
 
 config();
 const configService = new ConfigService();
-console.log('path', path.join(__dirname, '/../../src/common/entities'));
+console.log('path', path.join(__dirname, '/../../libs/common/src/entities'));
 
 export default new DataSource({
   type: 'postgres',
